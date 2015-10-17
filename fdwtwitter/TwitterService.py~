@@ -1,0 +1,62 @@
+#!/usr/bin/env python
+#Variables that contains the user credentials to access Twitter API 
+import tweepy
+from tweepy.streaming import StreamListener
+from tweepy import Stream
+import json
+
+
+
+
+
+class TwitterService:
+	def __init__(self,token,token_secret,key,key_secret):
+		self.access_token = token
+		self.access_token_secret = token_secret
+		self.consumer_key = key
+		self.consumer_secret = key_secret
+		self.auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+		self.auth.set_access_token(access_token, access_token_secret)
+		self.api = tweepy.API(auth)
+	
+	def getTwitterData(self,fn_name,limit):
+		if fn_name == "home_timeline":	
+			for data in tweepy.Cursor(api.home_timeline).items(limit):				
+				for attr, value in data.__dict__.iteritems():
+					if attr == "_json":
+						return json.dumps(value)
+		elif fn_name == "user_timeline":	
+			for data in tweepy.Cursor(api.user_timeline).items(limit):				
+				for attr, value in data.__dict__.iteritems():
+					if attr == "_json":
+						return json.dumps(value)
+						
+		elif fn_name == "retweets_of_me":	
+			for data in tweepy.Cursor(api.retweets_of_me).items(limit):				
+				for attr, value in data.__dict__.iteritems():
+					if attr == "_json":
+						return json.dumps(value)
+
+		elif fn_name == "followers":	
+			for data in tweepy.Cursor(api.followers).items(limit):				
+				for attr, value in data.__dict__.iteritems():
+					if attr == "_json":
+						return json.dumps(value)
+		elif fn_name == "friends":	
+			for data in tweepy.Cursor(api.friends).items(limit):				
+				for attr, value in data.__dict__.iteritems():
+					if attr == "_json":
+						return json.dumps(value)
+
+
+print "\n\n\|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
+# Iterate through all of the authenticated user's friends
+for friend in tweepy.Cursor(api.friends).items(1):
+    # Process the friend here
+    	for attr, value in friend.__dict__.iteritems():
+		print attr		
+		if attr == "_json":
+        		#print attr," -----> " , json.dumps(value)
+			print "========================================"
+
+
