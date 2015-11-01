@@ -3,30 +3,33 @@ import tweepy
 from tweepy.streaming import StreamListener
 from tweepy import Stream
 
-from fdwtwitter.twitterfdwservice import TwitterService
+from reb_fdw.twitter_service import TwitterService
 
 # Twitter FDW
-'''
-drop server if exists  twitter_srv cascade;
-CREATE SERVER twitter_srv foreign data wrapper multicorn options (
-    wrapper 'rebfdw.TwitterFDW'
-);
+''''
 
-drop table if exists  twitter cascade;
-CREATE FOREIGN TABLE twitter (
-    tweet text
- 
-)server twitter_srv options(
-	search_type 'hashtags',
-	search_number  '10',
-	search_text  'postgres',
+drop foreign table if exists fd_twitter cascade;
+CREATE FOREIGN TABLE fd_twitter (
+    tweet_data jsonb,
+    fn_name text,
+    search_text text  
+)server fd_twitter_srv options(
 	access_token  '',
 	access_token_secret  '',
 	consumer_key '',
-	consumer_secret  ''
+	consumer_secret  '');
+
+drop table if exists twitter_service;
+CREATE TABLE IF NOT EXISTS twitter_service (
+    tweet_data jsonb,
+    fn_name text,    
+    search_text text,
+    processed bool default false,
+    entry_time timestamp default now()
 );
 
-select * from twitter;
+insert into twitter_service ( select * from fd_twitter where fn_name = 'search' and search_text='rebataur');
+select * from twitter_service;
 '''
 class TwitterFDW(ForeignDataWrapper):
 
@@ -37,27 +40,26 @@ class TwitterFDW(ForeignDataWrapper):
 	self.access_token_secret = options["access_token_secret"]
 	self.consumer_key = options["consumer_key"]
 	self.consumer_secret = options["consumer_secret"]
-
 	self.tservice = TwitterService(self.access_token,self.access_token_secret,self.consumer_key,self.consumer_secret)
 
    def execute(self, quals, columns):
 	#Put some defaults
-	self.search_type = "user_timeline"
+	self.fn_name = "user_timeline"
 	self.search_number = 10
 	self.search_text = ""
 	for qual in quals :
-		if qual.field_name == "search_type":
-			self.search_type = qual.value
+		if qual.field_name == "fn_name":
+			self.fn_name = qual.value
 		elif qual.field_name == "limit":
 			self.search_number = qual.value
 		elif qual.field_name == "search_text":
 			self.search_text = qual.value
 	
 	line = {}
-	result = self.tservice.getTwitterData(self.search_type,self.search_number,self.search_text)
+	result = self.tservice.getTwitterData(self.fn_name,self.search_number,self.search_text)
 	for i in result:
 		line["tweet_data"] = i
-		line["search_type"] = self.search_type
+		line["fn_name"] = self.fn_name
 		line["search_text"] = self.search_text 
 		yield line
 	

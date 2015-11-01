@@ -21,7 +21,8 @@ class TwitterService:
 			for data in tweepy.Cursor(self.api.home_timeline).items(limit):				
 				for attr, value in data.__dict__.iteritems():
 					if attr == "_json":
-						return json.dumps(value)
+						result.append(json.dumps(value))
+			return result
 		elif fn_name == "user_timeline":	
 			result = []
 			for data in tweepy.Cursor(self.api.user_timeline).items(limit):				
