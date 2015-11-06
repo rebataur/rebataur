@@ -3,7 +3,7 @@ import tweepy
 from tweepy.streaming import StreamListener
 from tweepy import Stream
 
-from fdwtwitter.twitterfdwservice import TwitterService
+from reb_fdw.twitter_service import TwitterService
 
 # Twitter FDW
 ''''
@@ -63,4 +63,4 @@ class TwitterFDW(ForeignDataWrapper):
 		line["search_text"] = self.search_text 
 		yield line
 	
-	
+		
