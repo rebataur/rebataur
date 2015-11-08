@@ -4,33 +4,9 @@ from tweepy.streaming import StreamListener
 from tweepy import Stream
 
 from reb_fdw.twitter_service import TwitterService
+from reb_fdw.owm_service import OWMService
 
 # Twitter FDW
-''''
-
-drop foreign table if exists fd_twitter cascade;
-CREATE FOREIGN TABLE fd_twitter (
-    tweet_data jsonb,
-    fn_name text,
-    search_text text  
-)server fd_twitter_srv options(
-	access_token  '',
-	access_token_secret  '',
-	consumer_key '',
-	consumer_secret  '');
-
-drop table if exists twitter_service;
-CREATE TABLE IF NOT EXISTS twitter_service (
-    tweet_data jsonb,
-    fn_name text,    
-    search_text text,
-    processed bool default false,
-    entry_time timestamp default now()
-);
-
-insert into twitter_service ( select * from fd_twitter where fn_name = 'search' and search_text='rebataur');
-select * from twitter_service;
-'''
 class TwitterFDW(ForeignDataWrapper):
 
    def __init__(self, options, columns):
@@ -62,5 +38,40 @@ class TwitterFDW(ForeignDataWrapper):
 		line["fn_name"] = self.fn_name
 		line["search_text"] = self.search_text 
 		yield line
+	
+	
+#--------------OWM
+class OWMFDW(ForeignDataWrapper):
+
+   def __init__(self, options, columns):
+        super(OWMFDW, self).__init__(options, columns)
+        self.columns = columns
+	self.key =  options["key"]
+	self.oservice = OWMService(self.key)
+
+   def execute(self, quals, columns):
+	#Put some defaults
+	self.fn_name = "weather"
+	self.search_number = 4
+	
+	for qual in quals :
+		if qual.field_name == "fn_name":
+			self.fn_name = qual.value
+		elif qual.field_name == "city_name":
+			self.city_name = qual.value
+		elif qual.field_name == "country_name":
+			self.country_name = qual.value
+		elif qual.field_name == "limit":
+			self.search_number = qual.value
+	line = {}
+	result = self.oservice.getOWMData(self.fn_name,self.city_name,self.country_name,self.search_number)
+	for i in result:
+		line["weather_data"] = i
+		line["fn_name"] = self.fn_name
+		line["city_name"] = self.city_name 
+		line["country_name"] = self.country_name 
+		yield line
+	
+	
 	
 	

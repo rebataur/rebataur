@@ -45,3 +45,24 @@ CREATE FOREIGN TABLE fdw_webanalytics_aws
   createdat timestamp without time zone DEFAULT now()
 ) SERVER fdw_aws_pg_srv OPTIONS (schema_name 'public', table_name 'webanalytics_aws'); 
 """
+
+
+owm_fdw_sql = """	
+--- drop and create teh server			
+drop server if exists fdw_openweathermap_srv cascade;
+create server fdw_openweathermap_srv  FOREIGN DATA WRAPPER multicorn
+options (
+	 wrapper 'reb_main.OWMFDW'
+);
+
+--- drop and create the foreign table
+
+DROP FOREIGN TABLE IF EXISTS fdw_openweathermap cascade;
+CREATE FOREIGN TABLE fdw_openweathermap (
+    weather_data text,
+    fn_name text,
+    city_name text,
+    country_name text 	   
+)server fdw_openweathermap_srv options( key  '%s');		
+
+"""

@@ -9,5 +9,5 @@ class FDWService:
 		self.pgsrv.execute_ddl(twitter_query)
 	def process_twitter_srv(self):
 		self.pgsrv.execute_ddl(cons.process_twitter_sql)
-		
-		
+	def call_owm_srv(self,fn_name,city_name,country_name):
+		pass

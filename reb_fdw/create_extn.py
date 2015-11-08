@@ -18,7 +18,7 @@ class CreateExtn:
 	def init_twitter_extn(self):
 		access_token = self.pgsrv.execute_dml("select key from service_reg where service_name = 'twitter_srv' and key_name = 								'access_token'")[0][0] 
 		
- 		access_token_secret = self.pgsrv.execute_dml("select key from service_reg where service_name = 'twitter_srv' and key_name = 								'access_token_secret'") [0][0]
+ 		access_token_secret = self.pgsrv.execute_dml("select key from service_reg where service_name = 'twitter_srv' and key_name = 										'access_token_secret'")[0][0]
 		
 		consumer_key = self.pgsrv.execute_dml("select key from service_reg where service_name = 'twitter_srv' and key_name = 								'consumer_key'")[0][0]
 		
@@ -38,8 +38,12 @@ class CreateExtn:
 
 
 		
-		aws_pg = fdw_cons.aws_pg_fdw_sql % ( aws_pg_host,aws_pg_db,aws_pg_port,aws_pg_user,aws_pg_pwd)
+		aws_pg = fdw_cons.kaws_pg_fdw_sql % ( aws_pg_host,aws_pg_db,aws_pg_port,aws_pg_user,aws_pg_pwd)
 		self.pgsrv.execute_ddl(aws_pg)
-		
+	def init_owm_extn(self):
+		owm_key = self.pgsrv.execute_dml("select key from service_reg where service_name = 'openweathermap_srv' and key_name = 	'key'")[0][0]
+		owm_sql = (fdw_cons.owm_fdw_sql) % (owm_key)
+		self.pgsrv.execute_ddl(owm_sql)
+ 
 		
 
