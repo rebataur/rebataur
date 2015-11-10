@@ -1,9 +1,5 @@
 create_meta_tables = """
---- create service_reg if not exists		
-create table if not exists service_reg( service_name varchar(16), key_name varchar(16), key text );
-create extension if not exists multicorn;
 
----------------------------------
 drop table column_meta;
 create table column_meta(
 	id bigserial primary key,
