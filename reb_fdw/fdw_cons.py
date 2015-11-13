@@ -1,11 +1,10 @@
 create_meta_tables = """
---- create service_reg if not exists		
-create table if not exists service_reg( service_name varchar(16), key_name varchar(16), key text );
 create extension if not exists multicorn;
 
----------------------------------
-drop table column_meta;
-create table column_meta(
+-------------------------------------------------------------
+
+---DROP table column_meta cascade;
+create table if not exists column_meta(
 	id bigserial primary key,
 	column_name text,
 	table_name text,
@@ -16,8 +15,8 @@ create table column_meta(
 	
 	
 );
-drop table service_meta;
-create table service_meta(
+---drop table service_meta cascade;
+create table if not exists  service_meta(
 	id bigserial primary key,
 	service_name text,
 	service_type text,
@@ -26,6 +25,46 @@ create table service_meta(
 	represented_by_tables text[]  
 	
 );
+
+insert into service_meta(
+	service_name,
+	service_type,	
+	refresh_interval_sec,
+	represented_by_tables
+)values(
+	'twitter_srv',
+	'social',
+	3600,
+	ARRAY['twitter_srv','twitter_search','twitter_home_timeline','twitter_friends','twitter_user_timeline','twitter_retweets_of_me','twitter_followers']	
+);
+insert into service_meta(
+	service_name,
+	service_type,	
+	refresh_interval_sec,
+	represented_by_tables
+)values(
+	'aws_pg_srv',
+	'aws',
+	0,
+	ARRAY['webanalytics_aws']	
+);
+insert into service_meta(
+	service_name,
+	service_type,	
+	refresh_interval_sec,
+	represented_by_tables
+)values(
+	'fdw_openweathermap',
+	'weather',
+	3600*12,
+	ARRAY['fdw_openweathermap']	
+);
+
+select * from service_meta;
+
+---DROP table service_reg;
+create table if not exists service_reg( service_name text ,key_name text, key text,fk_id bigint references service_meta(id) null);
+
 """
 
 

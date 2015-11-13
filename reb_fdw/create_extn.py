@@ -1,4 +1,3 @@
-import psycopg2
 from reb_main.pg_srv import PGService
 import fdw_cons
 
@@ -11,7 +10,7 @@ class CreateExtn:
 		
 
 	def init_twitter_extn(self):
-		access_token = self.pgsrv.execute_dml("select key from service_reg where service_name = 'twitter_srv' and key_name = 								'access_token'")[0][0] 
+		access_token = self.pgsrv.execute_dml("select key from service_reg where service_name = 'twitter_srv' and key_name = 								'access_token'")[0][0]
 		
  		access_token_secret = self.pgsrv.execute_dml("select key from service_reg where service_name = 'twitter_srv' and key_name = 										'access_token_secret'")[0][0]
 		
