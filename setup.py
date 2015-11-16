@@ -9,6 +9,7 @@ setup(
           'psycopg2',
 	  'multicorn',
 	  'tweepy',
-	  'pyowm'
+	  'pyowm',
+	  'bottle'
       ],
 )

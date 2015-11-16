@@ -3,12 +3,14 @@ setup(
   name='rebfdw',
   version='0.0.1',
   author='Priya Ranjan',
-  license='MIT',
+  license='Mozilla Public License',
   packages=['reb_fdw','reb_main'],
   install_requires=[
-          'psycopg2-py27',
+          'psycopg2',
 	  'multicorn',
 	  'tweepy',
-	  'pyowm'
+	  'pyowm',
+	  'bottle',
+	  'bottle-sqlite'
       ],
 )

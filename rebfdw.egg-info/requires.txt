@@ -2,3 +2,4 @@ psycopg2
 multicorn
 tweepy
 pyowm
+bottle
