@@ -1,11 +1,13 @@
 import sqlite3
 from bottle import route, run, debug, template, request,redirect, static_file, error
 from os.path import expanduser
-
+import os
 from reb_main.pg_srv import PGService
+import cons
 
 home = expanduser("~")
 sqlite_loc = home + "/rebconfig.db"
+
 
 
 @route('/static/<filepath:path>')
@@ -21,19 +23,8 @@ def config():
 
 
 @route('/config')
-def config():
-  
-    pg_config = get_pg_config()
-    pg_con = ""
-    try:   
-    	pg = PGService(pg_config[0][1],pg_config[1][1],pg_config[2][1],pg_config[3][1],pg_config[4][1])
-	pg.execute_dml("select 1")
-	pg_con = "<b class='success'>success</b>"
-    except:
-	pg_con = "<b class='failure'>failed</b>"
-	
-
-    result = {"pg_con":pg_con}
+def config():   
+    result = {"pg_con":test_pg_conn()}
     return template('reb_config', val=result)
 
 
@@ -65,8 +56,57 @@ def submit_config(path):
 		rows = c.execute("select value from config").fetchall()
 		c.close()
 		redirect("/config")
+	elif path == "twitter_srv":
+		pg = get_pg_conn()			
+		twitter_props = ["access_token","access_token_secret","consumer_key","consumer_secret"]
+		sql = """ delete from service_reg where service_name = '%s' """ % path
+		pg.execute_ddl(sql)		
+		for i in twitter_props:	
+			sql = """insert into service_reg(service_name,key_name,key, fk_id) values('%s','%s','%s',%s) """ % 					      (path,i,request.forms.get(i), 1 )
+			pg.execute_ddl(sql)
 		
+		redirect("/config")
+			
+	elif path == "aws_pg_srv":
+		pg = get_pg_conn()			
+		aws_pg_props = ["aws_pg_host","aws_pg_port","aws_pg_db","aws_pg_user","aws_pg_pwd"]
+		sql = """ delete from service_reg where service_name = '%s' """ % path
+		pg.execute_ddl(sql)		
+		for i in aws_pg_props:	
+			sql = """insert into service_reg(service_name,key_name,key, fk_id) values('%s','%s','%s',%s) """ % 					      (path,i,request.forms.get(i), 2)
+			pg.execute_ddl(sql)
+		
+		redirect("/config")
+	elif path == "openweathermap_srv":
+		pg = get_pg_conn()			
+		openweathermap_props = ["key"]
+		sql = """ delete from service_reg where service_name = '%s' """ % path
+		pg.execute_ddl(sql)		
+		for i in openweathermap_props:	
+			sql = """insert into service_reg(service_name,key_name,key, fk_id) values('%s','%s','%s',%s) """ % 					      (path,i,request.forms.get(i), 3)
+			pg.execute_ddl(sql)
+		
+		redirect("/config")
+			
+@route('/upload', method='POST')
+def do_upload():
+    save_path = home+"/reb_repository"
 
+    if not os.path.exists(save_path):
+	os.makedirs(save_path)
+
+    category   = request.forms.get('category')
+    upload     = request.files.get('upload')
+    name, ext = os.path.splitext(upload.filename)
+    if ext not in ('.csv','.tsv','.sql','.gz'):
+        return 'File extension not allowed.'
+
+ 
+    upload.save(save_path) # appends upload.filename automatically
+    return 'OK'
+
+
+#-------------------------------------------------------------------------
 def initialize():
 	conn = sqlite3.connect(sqlite_loc)
 	c = conn.cursor()
@@ -82,5 +122,26 @@ def get_pg_config():
 	
 	return rows
 
+def test_pg_conn():
+	pg_config = get_pg_config()
+    	pg_con = ""
+    	try:   
+    		pg = PGService(pg_config[0][1],pg_config[1][1],pg_config[2][1],pg_config[3][1],pg_config[4][1])
+		pg.execute_dml("select 1")
+		init_pg_db()
+		pg_con = "success"
+		
+    	except:
+		pg_con = "failed"
+	return pg_con
+
+def get_pg_conn():
+	pg_config = get_pg_config()     	 
+    	return PGService(pg_config[0][1],pg_config[1][1],pg_config[2][1],pg_config[3][1],pg_config[4][1])
 	
+		
+def init_pg_db():
+	pg = get_pg_conn()
+	pg.execute_ddl(cons.init_pg_db)
+
 run(host='localhost', port=8080,debug=True, reloader=True)	
