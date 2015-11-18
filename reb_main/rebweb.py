@@ -30,8 +30,9 @@ def config():
 
 @route('/wizard')
 def wizard():
-    r = {"one":1,"two":2}
-    return template('reb_wizard', val=r)
+    dir_list = os.listdir(home+"/reb_repository")
+    result = {"rep_files":dir_list}
+    return template('reb_wizard', val=result)
 
 
 @route('/analytics')
