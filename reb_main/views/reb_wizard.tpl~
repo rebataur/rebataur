@@ -40,7 +40,8 @@
 	
 	<tr class="rep_files">
 		<td>{{i}}</td>
-		<td><a href="/process_rep_file">Process</a></td>
+		
+		<td><a href="/analyze_rep_file/{{i}}">Analyze</a></td>
 	</tr>
 % end
 </body>

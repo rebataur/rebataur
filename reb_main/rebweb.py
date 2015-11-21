@@ -1,13 +1,17 @@
 import sqlite3
-from bottle import route, run, debug, template, request,redirect, static_file, error
 from os.path import expanduser
 import os
+import json
+import csv
+
+from bottle import route, run, debug, template, request,redirect, static_file, error
+
 from reb_main.pg_srv import PGService
 import cons
 
 home = expanduser("~")
 sqlite_loc = home + "/rebconfig.db"
-
+rep_path = home+"/reb_repository"
 
 
 @route('/static/<filepath:path>')
@@ -91,10 +95,10 @@ def submit_config(path):
 			
 @route('/upload', method='POST')
 def do_upload():
-    save_path = home+"/reb_repository"
+    
 
-    if not os.path.exists(save_path):
-	os.makedirs(save_path)
+    if not os.path.exists(rep_path):
+	os.makedirs(rep_path)
 
     category   = request.forms.get('category')
     upload     = request.files.get('upload')
@@ -103,10 +107,52 @@ def do_upload():
         return 'File extension not allowed.'
 
  
-    upload.save(save_path) # appends upload.filename automatically
+    upload.save(rep_path) # appends upload.filename automatically
     redirect("/wizard")
 
+@route("/analyze_rep_file")
+def analyze_rep_file():	
+	return template("analyze_rep_file")	
 
+@route("/query",method="POST")
+def query():	
+	cmd = request.forms.get("cmd")
+	key = request.forms.get("key")
+	val = request.forms.get("val")
+	if cmd == "get" and key == "tables":
+		res = []
+		for x in os.listdir(rep_path):
+			res.append( x[:-4] )
+		return json.dumps(res)
+	elif cmd == "get" and key == "cols":
+		with open(rep_path + "/" + val + ".csv") as f:
+			header = f.readline().replace("\n","")
+			print header.split(",")			
+			return json.dumps( header.split(",") )
+
+@route("/fact/<path:path>",method="POST")
+def query(path):
+	key_params = [] 
+	msr_params = []
+	if path == "save_keys":
+ 		for i in range(0,100):				
+			if request.forms.get(str(i)) is not None and request.forms.get(str(i+100)) is not None:
+				key_params.append(request.forms.get(str(i)))
+				key_params.append(request.forms.get("primary_key_"+str(100+i)))
+				key_params.append(request.forms.get(str(i+100)))
+				
+	
+	
+	elif path == "save_measures":
+		for i in range(0,100):			
+			if request.forms.get(str(i)) is not None and request.forms.get(str(i+100)) is not None:
+				msr_params.append(request.forms.get(str(i)))
+				msr_params.append(request.forms.get("dt_type_" + str(100+i)))
+				msr_params.append(request.forms.get(str(i+100)))
+	print key_params,msr_params
+	
+		
+		
 #-------------------------------------------------------------------------
 def initialize():
 	conn = sqlite3.connect(sqlite_loc)

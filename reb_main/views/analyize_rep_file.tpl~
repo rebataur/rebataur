@@ -28,22 +28,11 @@
 	<a href="analytics">Analytics</a>
 </div>
 		
-	<form action="/upload" method="post" enctype="multipart/form-data">
-  Category:      <input type="text" name="category" />
-  Select a file: <input type="file" name="upload" />
-  <input type="submit" value="Start upload" />
-</form>
+	
 
 <h4>Uploaded Files</h4>
 <table>
-% for i in val["rep_files"]:
-	
-	<tr class="rep_files">
-		<td>{{i}}</td>
-		
-		<td><a href="/analyze_rep_file/{{i}}">Analyze</a></td>
-	</tr>
-% end
+
 </body>
 
 
