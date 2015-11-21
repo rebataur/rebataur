@@ -8,6 +8,7 @@
 		
 		<style>
 
+
 		</style>
 		
 
@@ -25,8 +26,22 @@
 		<table>
 
 			<thead>
-				<tr><td>Column Name</td>
+				<th>
+					<td>Customer Name</td><td>Item Count</td>
+				</th>
+
+				
 			</thead>
+			<tbody>
+			% for i in val:
+				<tr>
+				<td>{{i[0]}}</td><td>{{i[1]}}</td>
+
+
+				</tr>
+			% end
+			</tbody>
+
 
 		</table>
 	</body>

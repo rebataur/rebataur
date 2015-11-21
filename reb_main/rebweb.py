@@ -41,8 +41,15 @@ def wizard():
 
 @route('/analytics')
 def analytics():
-    r = {"one":1,"two":2}
-    return template('reb_analytics', val=r)
+    pg = get_pg_conn()
+    res = pg.execute_dml("""
+	select cust.name,items_item_cnt
+	from fact_customer
+	inner join customer cust on cust.id = customer_id
+	group by items_item_cnt,cust.name
+	order by items_item_cnt desc;
+	""")
+    return template('reb_analytics', val=res)
 
 @route("/submit_config/<path:path>",method="POST")
 def submit_config(path):
@@ -133,27 +140,89 @@ def query():
 @route("/fact/<path:path>",method="POST")
 def query(path):
 	key_params = [] 
-	msr_params = []
+	sql_tmpl = "insert into facts_table(fact_table_name,table_name,key_type,key_val,dt_type) values ('%s','%s','%s','%s','%s');"
+	pg = get_pg_conn()
+	fact_table_name = request.forms.get("fact_table_name")
+		
 	if path == "save_keys":
+		pg.execute_ddl("delete from facts_table where fact_table_name = '%s'" 
+					% (fact_table_name ) )
+	
  		for i in range(0,100):				
 			if request.forms.get(str(i)) is not None and request.forms.get(str(i+100)) is not None:
-				key_params.append(request.forms.get(str(i)))
-				key_params.append(request.forms.get("primary_key_"+str(100+i)))
-				key_params.append(request.forms.get(str(i+100)))
-				
+				arr = []
+				arr.append(request.forms.get(str(i)))
+				arr.append(request.forms.get("primary_key_"+str(100+i)))
+				arr.append(request.forms.get(str(i+100)))
+				key_params.append(arr)
+		for i in range(0,len(key_params)):	
+			sql = sql_tmpl % (fact_table_name,key_params[i][0],"primary_key",key_params[i][1],"int")	
+			pg.execute_ddl(sql)
+			sql = sql_tmpl % (fact_table_name,key_params[i][0],"fact_key",key_params[i][2],"int")	
+			pg.execute_ddl(sql)
+
 	
 	
-	elif path == "save_measures":
+	elif path == "save_measures":	
+		pg.execute_ddl("delete from facts_table where fact_table_name = '%s' and key_type ='measure_key';" 
+					% (fact_table_name ) )
+	
 		for i in range(0,100):			
 			if request.forms.get(str(i)) is not None and request.forms.get(str(i+100)) is not None:
-				msr_params.append(request.forms.get(str(i)))
-				msr_params.append(request.forms.get("dt_type_" + str(100+i)))
-				msr_params.append(request.forms.get(str(i+100)))
-	print key_params,msr_params
+				arr = []
+				arr.append(request.forms.get(str(i)))				
+				arr.append(request.forms.get(str(i+100)))
+				arr.append(request.forms.get("dt_type_" + str(100+i)))
+				key_params.append(arr)
+
+		
+	
+		for i in range(0,len(key_params)):
+			sql = sql_tmpl % (fact_table_name,key_params[i][0],"measure_key",key_params[i][1],key_params[i][2])	
+			pg.execute_ddl(sql)
+		
+		create_star_schema(fact_table_name)
 	
 		
 		
 #-------------------------------------------------------------------------
+def create_star_schema(fact_table_name):
+	select = []
+	join = []
+		
+	pg = get_pg_conn()
+	facts = pg.execute_dml("select fact_table_name,table_name,key_type,key_val,dt_type from facts_table where fact_table_name = '%s' order by id asc;" % 			fact_table_name )
+	
+	for i in range(0,len(facts)):
+		if facts[i][2] == "primary_key" or facts[i][2] == "measure_key":
+			
+			select.append( facts[i][1][:2] + "." + facts[i][3] + " as " + facts[i][1] + "_" + facts[i][3] )
+	from_col = ""
+	join_sql = ""
+	col = ""
+	idx = ""
+	first_time = False
+	for i in range(0,len(facts)):
+	
+		column = facts[i]
+		if column[2] == "primary_key" and i == 0 :
+			from_col = " from %s %s " % (column[1], column[1][:2])	
+			col = column[1]
+			idx = column[3]	
+		elif column[2] == "primary_key":
+			idx = column[3]
+		elif column[2] == "fact_key" and i > 1:
+			
+			join_sql += " inner join %s %s on %s.%s = %s.%s" % (column[1], column[1][:2], col[:2],idx,column[1][:2],column[3])
+			col = column[1]
+		
+			
+	select_sql =  "select " + ",".join(select) + from_col + join_sql
+	star_schema =  "create table %s as (%s);" % (fact_table_name, select_sql)
+	print star_schema
+	pg.execute_ddl(star_schema)
+			
+	
 def initialize():
 	conn = sqlite3.connect(sqlite_loc)
 	c = conn.cursor()

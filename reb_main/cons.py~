@@ -602,6 +602,13 @@ insert into service_meta(
 );
 
 
-
+create table if not exists facts_table(
+	id bigserial primary key,
+	fact_table_name,
+	table_name text,		
+	key_type text, 
+	key_val text,
+	dt_type text
+);
 """
 

@@ -102,7 +102,7 @@
 			}
 			function get_dt_options(){
 				var dt_option = "" ; 
-				var dt_types = ["numeric","string","loc","date","time","datetime"];
+				var dt_types = ["int","numeric","string","loc","date","time","datetime"];
 				for (var i =0; i< dt_types.length; i++){
 					dt_option += "<option class='col' value='" + dt_types[i] + "'>"+dt_types[i]+"</option>";
 				}
@@ -137,9 +137,11 @@
 
 <h4>Add keys</h4>
 <form method="POST" action="fact/save_keys">
-
+<labe>Fact Table Name</label><input type="text" name="fact_table_name"/>
 <table>
-
+<thead>
+	<th><td>Select Table, Primary key and fact key</td></th>
+</thead>
 <tbody>
 	<tr id="primary_keys">		
 	</tr>

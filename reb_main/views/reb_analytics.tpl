@@ -26,8 +26,22 @@
 		<table>
 
 			<thead>
-				<tr><td>Column Name</td>
+				<tr>
+					<th>Customer Name</th><th>Item Count</th>
+				</tr>
+
+				
 			</thead>
+			<tbody>
+			% for i in val:
+				<tr>
+				<td>{{i[0]}}</td><td>{{i[1]}}</td>
+
+
+				</tr>
+			% end
+			</tbody>
+
 
 		</table>
 	</body>
