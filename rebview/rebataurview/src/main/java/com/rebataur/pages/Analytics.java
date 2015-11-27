@@ -1,4 +1,4 @@
-package com.rebataur;
+package com.rebataur.pages;
 
 import java.util.Arrays;
 import java.util.List;

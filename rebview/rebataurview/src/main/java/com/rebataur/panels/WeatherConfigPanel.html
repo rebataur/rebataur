@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<!--
+-- MPL
+-->
+<wicket:panel>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Weather API Configuration</h3>
+        </div>
+        <div class="panel-body">
+            <form class="form-horizontal">
+                <fieldset>
+
+                    <!-- Form Name -->
+                    <legend>Form Name</legend>
+
+                    <!-- Text input-->
+                    <div class="control-group">
+                        <label class="control-label" for="weather_key">Weather API Key</label>
+                        <div class="controls">
+                            <input id="weather_key" name="weather_key" placeholder="key" class=" form-control" required="" type="text">
+
+                        </div>
+                    </div>
+
+                    <!-- Button (Double) -->
+                    <div class="control-group">
+                        <label class="control-label" for="save">Save Configuration</label>
+                        <div class="controls">
+                            <button id="save" name="save" class="btn btn-success">Save</button>
+                            <button id="cancel" name="cancel" class="btn btn-danger">Cancel</button>
+                        </div>
+                    </div>
+
+                </fieldset>
+            </form>
+
+        </div>
+    </div>
+</wicket:panel>

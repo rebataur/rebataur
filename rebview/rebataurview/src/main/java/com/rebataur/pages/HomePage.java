@@ -1,4 +1,4 @@
-package com.rebataur;
+package com.rebataur.pages;
 
 import java.util.Arrays;
 import java.util.List;
@@ -11,11 +11,11 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-public class Configure extends WebPage {
+public class HomePage extends WebPage {
 
     private static final long serialVersionUID = 1L;
 
-    public Configure(final PageParameters parameters) {
+    public HomePage(final PageParameters parameters) {
         super(parameters);
 
     }
