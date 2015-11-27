@@ -42,7 +42,13 @@ def wizard():
 @route('/analytics')
 def analytics():
     pg = get_pg_conn()
-    res = pg.execute_dml("select customer_id,items_item_cnt from fact_customer group by items_item_cnt,customer_id order by items_item_cnt desc;")
+    res = pg.execute_dml("""
+	select cust.name,items_item_cnt
+	from fact_customer
+	inner join customer cust on cust.id = customer_id
+	group by items_item_cnt,cust.name
+	order by items_item_cnt desc;
+	""")
     return template('reb_analytics', val=res)
 
 @route("/submit_config/<path:path>",method="POST")
@@ -254,4 +260,4 @@ def init_pg_db():
 	pg = get_pg_conn()
 	pg.execute_ddl(cons.init_pg_db)
 
-run(host='localhost', port=8080,debug=True, reloader=True)	
+run(host='localhost', port=8888,debug=True, reloader=True)	

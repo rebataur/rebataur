@@ -260,4 +260,4 @@ def init_pg_db():
 	pg = get_pg_conn()
 	pg.execute_ddl(cons.init_pg_db)
 
-run(host='localhost', port=8080,debug=True, reloader=True)	
+run(host='127.0.0.1', port=8888,debug=True, reloader=True)	
