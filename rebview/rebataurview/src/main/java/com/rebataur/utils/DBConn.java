@@ -91,6 +91,36 @@ public class DBConn {
         }
 
     }
+    
+    
+      public static Connection getAWSPGConn(AWSPGConfig awspgc) throws ClassNotFoundException, SQLException {
+
+        try {
+
+            Class.forName(PG_DRIVER_CLASS);
+
+        } catch (ClassNotFoundException e) {
+
+            e.printStackTrace();
+
+        }
+
+        Connection connection = null;
+
+        try {
+            String[] pgConnVal = getPGConnString();
+            String url = String.format("jdbc:postgresql://%s:%s/%s",awspgc.getHostname(),awspgc.getPort(),awspgc.getDatabase());
+            
+            connection = DriverManager.getConnection(
+                    url, awspgc.getUsername(),awspgc.getPassword());
+
+            return connection;
+        } catch (SQLException e) {
+            throw e;
+
+        }
+
+    }
 
     public static String[] getPGConnString() throws SQLException, ClassNotFoundException {
         String[] pgConfigKey = {"hostname", "port", "database", "username", "password"};

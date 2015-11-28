@@ -3,12 +3,12 @@
 -- MPL
 -->
 <wicket:panel>
-    <div class="panel panel-default">
+     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">Weather API Configuration</h3>
         </div>
         <div class="panel-body">
-            <form class="form-horizontal">
+            <form class="form-horizontal" wicket:id="weather_config_form">
                 <fieldset>
 
                     <!-- Form Name -->
@@ -18,7 +18,7 @@
                     <div class="control-group">
                         <label class="control-label" for="weather_key">Weather API Key</label>
                         <div class="controls">
-                            <input id="weather_key" name="weather_key" placeholder="key" class=" form-control" required="" type="text">
+                            <input id="weather_key" wicket:id="key" name="weather_key" placeholder="key" class=" form-control" required="" type="text">
 
                         </div>
                     </div>

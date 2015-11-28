@@ -52,7 +52,7 @@ public class RebConfigPanel extends Panel {
                     super.onSubmit();
                     RebConfig config = getModelObject();
                     try {
-                        getRS().saveRebConfig(config);
+                        getRS().saveAndInitRebConfig(config);
                         if (getRS().testPGConn()) {
                             pgConnTestStr = "Connection Successful !";
                             pgConnTest.add(new AttributeModifier("class", pgConnTestSucssesStyle));

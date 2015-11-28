@@ -8,7 +8,7 @@
             <h3 class="panel-title">Twitter Configuration</h3>
         </div>
         <div class="panel-body">
-            <form class="form-horizontal">
+            <form class="form-horizontal" wicket:id="twitter_config_form">
                 <fieldset>
 
                     <!-- Form Name -->
@@ -18,8 +18,7 @@
                     <div class="control-group">
                         <label class="control-label" for="access_token">Access Token</label>
                         <div class="controls">
-                            <input id="access_token" name="access_token" placeholder="" class=" form-control" required="" type="text">
-                            <p class="help-block">Access Token</p>
+                            <input id="access_token" wicket:id="accessToken" name="access_token" placeholder="" class=" form-control" required="" type="text">
                         </div>
                     </div>
 
@@ -27,7 +26,7 @@
                     <div class="control-group">
                         <label class="control-label" for="access_token_secret">Access Token Secret</label>
                         <div class="controls">
-                            <input id="access_token_secret" name="access_token_secret" placeholder="" class=" form-control" required="" type="text">
+                            <input id="access_token_secret"  wicket:id= "accessTokenSecret" name="access_token_secret" placeholder="" class=" form-control" required="" type="text">
 
                         </div>
                     </div>
@@ -36,7 +35,7 @@
                     <div class="control-group">
                         <label class="control-label" for="consumer_key">Consumer Key</label>
                         <div class="controls">
-                            <input id="consumer_key" name="consumer_key" placeholder="" class=" form-control" required="" type="text">
+                            <input id="consumer_key" wicket:id="consumerKey" name="consumer_key" placeholder="" class=" form-control" required="" type="text">
 
                         </div>
                     </div>
@@ -45,7 +44,7 @@
                     <div class="control-group">
                         <label class="control-label" for="Consumer Secret">Consumer Secret</label>
                         <div class="controls">
-                            <input id="Consumer Secret" name="Consumer Secret" placeholder="" class=" form-control" required="" type="text">
+                            <input id="Consumer Secret" wicket:id="consumerSecret" name="Consumer Secret" placeholder="" class=" form-control" required="" type="text">
 
                         </div>
                     </div>
@@ -55,7 +54,7 @@
                         <label class="control-label" for="save">Save Configuration</label>
                         <div class="controls">
                             <button id="save" name="save" class="btn btn-success">Save</button>
-                            <button id="cancel" name="cancel" class="btn btn-danger">Cancel</button>
+                        
                         </div>
                     </div>
 

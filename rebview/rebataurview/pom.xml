@@ -49,6 +49,7 @@
         <derby.version>10.12.1.1</derby.version>
         <sqlite.jdbc.version>3.8.11.2</sqlite.jdbc.version>
         <stringtemplate.version>4.0.2</stringtemplate.version>
+        <jodd.version>3.6.6</jodd.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- allowed values: R7, 1.0, 1.5, 2.0 or none -->
         <wtp.version>none</wtp.version>
@@ -133,9 +134,11 @@
             <artifactId>stringtemplate</artifactId>
             <version>${stringtemplate.version}</version>
         </dependency>
-
-
-
+        <dependency>
+            <groupId>org.jodd</groupId>
+            <artifactId>jodd-db</artifactId>
+            <version>${jodd.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <resources>
