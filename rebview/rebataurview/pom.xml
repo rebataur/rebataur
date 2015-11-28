@@ -45,8 +45,10 @@
         <jetty9.version>9.2.13.v20150730</jetty9.version>
         <log4j.version>2.4</log4j.version>
         <junit.version>4.12</junit.version>
-        <postgres.jdbc.version>9.4-1206-jdbc42</postgres.jdbc.version>
+        <postgres.jdbc.version>9.4-1205-jdbc41</postgres.jdbc.version>
         <derby.version>10.12.1.1</derby.version>
+        <sqlite.jdbc.version>3.8.11.2</sqlite.jdbc.version>
+        <stringtemplate.version>4.0.2</stringtemplate.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- allowed values: R7, 1.0, 1.5, 2.0 or none -->
         <wtp.version>none</wtp.version>
@@ -117,10 +119,21 @@
             <version>${postgres.jdbc.version}</version>
         </dependency>
         <dependency>
-	<groupId>org.apache.derby</groupId>
-	<artifactId>derby</artifactId>
-	<version>${derby.version}</version>
-</dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derby</artifactId>
+            <version>${derby.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>${sqlite.jdbc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>stringtemplate</artifactId>
+            <version>${stringtemplate.version}</version>
+        </dependency>
+
 
 
     </dependencies>

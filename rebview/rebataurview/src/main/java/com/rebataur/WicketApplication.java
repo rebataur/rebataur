@@ -4,6 +4,12 @@ import com.rebataur.pages.Configure;
 import com.rebataur.pages.Analytics;
 import com.rebataur.pages.Contact;
 import com.rebataur.pages.HomePage;
+import com.rebataur.services.RebServices;
+import com.rebataur.utils.Constants;
+import com.rebataur.utils.DBConn;
+import java.sql.Connection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 
@@ -35,4 +41,11 @@ public class WicketApplication extends WebApplication {
         mountPage("contact", Contact.class);
 
     }
+    
+    
+    public RebServices getRebServices(){
+        return new RebServices();
+    }
+ 
+   
 }
