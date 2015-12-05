@@ -19,10 +19,10 @@ class PGService:
 			print "Not able to connect to database with %s, %s, %s, %s" % (self.host,self.port,self.dbname,self.user) 
 			
 
-	def execute_ddl(self,query):
+	def set_data(self,query):
 		self.cur.execute(query)		
 	
-	def execute_dml(self,query):
+	def get_data(self,query):
 		self.cur.execute(query)
 		return self.cur.fetchall()
 	

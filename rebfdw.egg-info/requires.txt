@@ -1,3 +1,4 @@
+csvkit
 psycopg2
 multicorn
 tweepy

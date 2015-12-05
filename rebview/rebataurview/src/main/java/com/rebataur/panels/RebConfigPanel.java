@@ -34,11 +34,12 @@ public class RebConfigPanel extends Panel {
 
             final Label pgConnTest = new Label("reb_conn_test", new PropertyModel<String>(this, "pgConnTestStr"));
             if (getRS().testPGConn()) {
+                pgConnTestStr = "Connection Successful !";
                 pgConnTest.add(new AttributeModifier("class", pgConnTestSucssesStyle));
             } else {
+                pgConnTestStr = "Connection Failue ";
                 pgConnTest.add(new AttributeModifier("class", pgConnTestFailureStyle));
             }
-
             add(pgConnTest);
             TextField<String> hostname = new TextField<>("hostname");
             TextField<String> port = new TextField<>("port");

@@ -1,5 +1,5 @@
 from reb_main.pg_srv import PGService
-import fdw_cons
+import extn_cons
 
 class CreateExtn:
 	

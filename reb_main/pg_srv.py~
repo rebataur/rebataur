@@ -9,7 +9,7 @@ class PGService:
 			self.dbname = dbname
 			self.user = user
 			self.password = password
-			selrf.constr = ("host='%s' port='%s' dbname='%s' user='%s'  password='%s'") % 								(self.host,self.port,self.dbname,self.user,self.password)
+			self.constr = ("host='%s' port='%s' dbname='%s' user='%s'  password='%s'") % 								(self.host,self.port,self.dbname,self.user,self.password)
 			self.conn = psycopg2.connect(self.constr)
 
 			self.conn.set_isolation_level(0)

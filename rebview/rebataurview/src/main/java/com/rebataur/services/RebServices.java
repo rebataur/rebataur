@@ -89,6 +89,7 @@ public class RebServices {
         stmt.executeUpdate(sql);
         sql = String.format(s, "password", rebConfig.getPassword());
         stmt.executeUpdate(sql);
+        
 
     }
 
@@ -107,6 +108,8 @@ public class RebServices {
 
         sql = String.format(ConstantsSQL.fdwTwitterSQL, twitterConfig.getAccessToken(), twitterConfig.getAccessTokenSecret(), twitterConfig.getConsumerKey(), twitterConfig.getConsumerSecret());
         executeSQL(sql);
+        
+        executeSQL(ConstantsSQL.fdwTwitterSQL);
     }
 
     public AWSPGConfig getAWSPGConfig()  {
@@ -145,7 +148,7 @@ public class RebServices {
         insertSQL(sql);
         sql = String.format(s, "aws_pg_srv","aws_pg_password", awsPGConfig.getPassword(),2);
         insertSQL(sql);
-
+        
     }
 
     public WeatherConfig getWeatherConfig() throws SQLException {
@@ -156,7 +159,6 @@ public class RebServices {
         while (rs.next()) {
             weatherConfig.setKey(rs.getString("key") == null ? "" : rs.getString("key"));
         }
-        System.out.println(weatherConfig);
         return weatherConfig;
     }
 
@@ -165,6 +167,8 @@ public class RebServices {
         executeSQL(sql);
         sql = String.format("insert into service_reg(service_name,key_name,key, fk_id) values('%s','%s','%s',%s)", "openweathermap_srv", "key", weatherConfig.getKey(), 3);
         insertSQL(sql);
+        executeSQL(ConstantsSQL.fdwWeatherSQL);
+        
 
     }
 
@@ -208,6 +212,8 @@ public class RebServices {
 
         executeSQL(ConstantsSQL.initPGSQL);
         executeSQL(ConstantsSQL.createMetaTables);
+        System.out.println("**********************************");
+//        System.out.println(selectSingleSQL("select weather_data from fdw_openweathermap where city_name = 'london' and country_name = 'india'", "weather_data"));
 
     }
 
@@ -226,7 +232,6 @@ public class RebServices {
     private String selectSingleSQL(String sql, String key) throws SQLException {
         Connection conn = getPGConn();
         Statement stmt = conn.createStatement();
-        System.out.println(sql);
         ResultSet rs = stmt.executeQuery(sql);
         while (rs.next()) {
             return rs.getString(key);
@@ -247,6 +252,7 @@ public class RebServices {
             
             DBConn.getAWSPGConn(getAWSPGConfig());
             isConnected = true;
+            executeSQL(ConstantsSQL.fdwAWSPG);
         } catch (ClassNotFoundException | SQLException  ex) {
             Logger.getLogger(RebServices.class.getName()).log(Level.SEVERE, null, ex);
             isConnected= false;

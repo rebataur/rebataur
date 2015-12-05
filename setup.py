@@ -6,6 +6,7 @@ setup(
   license='Mozilla Public License',
   packages=['reb_fdw','reb_main'],
   install_requires=[
+	  'csvkit',
           'psycopg2',
 	  'multicorn',
 	  'tweepy',

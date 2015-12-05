@@ -1,11 +1,11 @@
 setup.py
 reb_fdw/__init__.py
-reb_fdw/create_extn.py
-reb_fdw/fdw_cons.py
 reb_fdw/owm_service.py
 reb_fdw/twitter_service.py
 reb_main/__init__.py
 reb_main/cons.py
+reb_main/create_extn.py
+reb_main/extn_cons.py
 reb_main/fdw_srv.py
 reb_main/pg_srv.py
 reb_main/rebweb.py
