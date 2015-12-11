@@ -12,7 +12,7 @@ setup(
 	  'tweepy',
 	  'pyowm',
 	  'bottle',
-	  'docker-py'
+	  'docker'
 
       ],
 )

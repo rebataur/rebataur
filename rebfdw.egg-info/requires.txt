@@ -4,3 +4,4 @@ multicorn
 tweepy
 pyowm
 bottle
+docker-py
