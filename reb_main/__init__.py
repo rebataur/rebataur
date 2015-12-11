@@ -98,44 +98,26 @@ class Utilities(ForeignDataWrapper):
 		
 		for qual in quals :
 			if qual.field_name == "fn_name":
-				self.fn_name = qual.value			
-			elif qual.field_name == "val":
-				self.val = qual.value
+				self.fn_name = qual.value	
+			
 			elif qual.field_name == "cmd":
 				self.cmd = qual.value
 
 
-		if self.fn_name == "download_file_from_url":
-			try:
-				response = urllib2.urlopen(self.val)
-				CHUNK = 16 * 1024
 			
-				baseFile = os.path.basename(self.val)
-				file = os.path.join(rep_path,baseFile)
-				with open(file, 'wb') as f:
- 					while True:
-      						chunk = response.read(CHUNK)
-      						if not chunk: break
-      						f.write(chunk)
-				line["result"] = "file %s downloaded and stored successfully " % file
-				
-			except Exception as e:
-				pass
-				 #log_to_postgres("There was an in downloading the file: %s", e ,level = ERROR,hint = "check the file exists and whether user has permission to write to reb_repository")
-			
-		elif self.fn_name == "exec":			
+		if self.fn_name == "exec":			
 			try:				
 				res = commands.getstatusoutput(self.cmd)
 				line["fn_name"] = self.fn_name
 				line["val"] = ""
 				line["result"] = res
-				
+				line["cmd"] = self.cmd
+				yield(line)
 			except Exception as e:
 				line["fn_name"] = self.fn_name
 				line["val"] = ""				
 				line["result"] = "Error %s " % e
-				
-				 #log_to_postgres("There was an error executing docker command Error: %s", e ,level = ERROR,hint = "Check your commands for errors")
+				yield(line)
+				log_to_postgres("There was an error executing docker command Error: %s" % e , ERROR,"Check your commands for errors")
 
 
-		yield(line)
