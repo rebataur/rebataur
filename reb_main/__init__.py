@@ -12,6 +12,8 @@ from logging import ERROR, WARNING
 
 from reb_fdw.twitter_service import TwitterService
 from reb_fdw.owm_service import OWMService
+import hdp_cons
+import hive_util
 
 rep_path ="/home/ranjan/reb_repository"
 
@@ -120,4 +122,43 @@ class Utilities(ForeignDataWrapper):
 				yield(line)
 				log_to_postgres("There was an error executing docker command Error: %s" % e , ERROR,"Check your commands for errors")
 
+	
 
+#---------------------Hadoop
+
+class HadoopFDW(ForeignDataWrapper):
+	def __init__(self,options,columns):
+		super(HadoopFDW,self).__init__(options, columns)
+		self.columns = columns
+		self.options = options	
+		
+		# check whether docker is running, if not then start it
+		isRedoopRunning = bool ( commands.getstatusoutput( "docker inspect -f {{.State.Running}} rebdoop" ) )
+		if isRedoopRunning is None or not isRedoopRunning:
+			commands.getstatusoutput( self.options["docker_remove"] )
+			commands.getstatusoutput( self.options["docker_start"] )
+
+	def execute(self, quals, columns ):		
+		line = {}
+		'''
+		# check whether docker is running, if not then start it
+		commands.getstatusoutput( self.options["docker_start"] )
+
+		isRedoopRunning = bool ( commands.getstatusoutput( "docker inspect -f {{.State.Running}} rebdoop" ) )
+		if isRedoopRunning is None or not isRedoopRunning:
+			commands.getstatusoutput( self.options["docker_remove"] )
+			commands.getstatusoutput( self.options["docker_start"] )
+		
+		'''
+		data = hive_util.getHiveData(self.options["loadsql"],self.options["createsql"], self.options["dropsql"],self.options["selectsql"])
+		for i in data:
+			yield i		
+		'''
+		data = [['Bank of Honolulu', 'Honolulu', 'HI', '21029', 'Bank of the Orient', '13-Oct-00', '17-Mar-05']]
+		i =0
+		return data
+		for col in columns:
+			line[col] = data[i]	
+			i += 1					
+		
+		'''

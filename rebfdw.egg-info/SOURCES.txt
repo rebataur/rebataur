@@ -7,6 +7,8 @@ reb_main/cons.py
 reb_main/create_extn.py
 reb_main/extn_cons.py
 reb_main/fdw_srv.py
+reb_main/hdp_cons.py
+reb_main/hive_util.py
 reb_main/pg_srv.py
 reb_main/rebweb.py
 rebfdw.egg-info/PKG-INFO
