@@ -15,6 +15,8 @@ create table if not exists column_meta(
 	
 	
 );
+SELECT pg_catalog.pg_extension_config_dump('column_meta','');
+
 ---drop table service_meta cascade;
 create table if not exists  service_meta(
 	id bigserial primary key,
@@ -25,6 +27,7 @@ create table if not exists  service_meta(
 	represented_by_tables text[]  
 	
 );
+SELECT pg_catalog.pg_extension_config_dump('service_meta','');
 
 insert into service_meta(
 	service_name,
