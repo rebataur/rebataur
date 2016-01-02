@@ -4,7 +4,7 @@ setup(
     version='0.0.1',
     author='Priya Ranjan',
     license='Mozilla Public License',
-    packages=['reb_fdw', 'reb_main'],
+    packages=find_packages(),
     install_requires=[
         'csvkit',
         'psycopg2',

@@ -1,7 +1,0 @@
-csvkit
-psycopg2
-tweepy
-pyowm
-bottle
-docker-py
-pyRserve

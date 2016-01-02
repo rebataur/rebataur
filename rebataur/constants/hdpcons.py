@@ -26,7 +26,7 @@ def getHiveSQL(args):
 drop server if exists fdw_hadoop_srv cascade;
 create server fdw_hadoop_srv foreign data wrapper multicorn
 options(
-	wrapper 'reb_main.HadoopFDW'
+	wrapper 'rebataur.HadoopFDW'
 );
 
 drop foreign table if exists fdw_hdp_%s cascade;

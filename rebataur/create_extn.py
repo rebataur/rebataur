@@ -1,5 +1,4 @@
-from reb_main.pg_srv import PGService
-import reb_main.extn_cons
+from rebataur.utils.pgutil import PGService
 
 
 class CreateExtn:

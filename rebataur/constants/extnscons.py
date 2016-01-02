@@ -73,7 +73,7 @@ twitter_fdw_sql = """
 			drop server if exists fdw_twitter_srv cascade;
 			create server fdw_twitter_srv  FOREIGN DATA WRAPPER multicorn
 			options (
- 				 wrapper 'reb_main.TwitterFDW'
+ 				 wrapper 'rebataur.TwitterFDW'
 			);
 
 			--- drop and create the foreign table
@@ -149,7 +149,7 @@ owm_fdw_sql = """
 drop server if exists fdw_openweathermap_srv cascade;
 create server fdw_openweathermap_srv  FOREIGN DATA WRAPPER multicorn
 options (
-	 wrapper 'reb_main.OWMFDW'
+	 wrapper 'rebataur.OWMFDW'
 );
 
 --- drop and create the foreign table
