@@ -489,7 +489,7 @@ contributors_enabled text ,
 location text ,
 profile_sidebar_border_color text ,
 default_profile text ,
-following text, 
+following text,
 
 fkid integer
 );
@@ -554,8 +554,8 @@ create table if not exists column_meta(
 	related_to_columns text[],
 	relation_types text[],
 	aliases text[]
-	
-	
+
+
 );
 create table  if not exists service_meta(
 	id bigserial primary key,
@@ -563,52 +563,51 @@ create table  if not exists service_meta(
 	service_type text,
 	related_to_columns text[],
 	refresh_interval_sec int,
-	represented_by_tables text[]  
-	
+	represented_by_tables text[]
+
 );
 
 insert into service_meta(
 	service_name,
-	service_type,	
+	service_type,
 	refresh_interval_sec,
 	represented_by_tables
 )values(
 	'twitter_srv',
 	'social',
 	3600,
-	ARRAY['twitter_srv','twitter_search','twitter_home_timeline','twitter_friends','twitter_user_timeline','twitter_retweets_of_me','twitter_followers']	
+	ARRAY['twitter_srv','twitter_search','twitter_home_timeline','twitter_friends','twitter_user_timeline','twitter_retweets_of_me','twitter_followers']
 );
 insert into service_meta(
 	service_name,
-	service_type,	
+	service_type,
 	refresh_interval_sec,
 	represented_by_tables
 )values(
 	'aws_pg_srv',
 	'aws',
 	0,
-	ARRAY['webanalytics_aws']	
+	ARRAY['webanalytics_aws']
 );
 insert into service_meta(
 	service_name,
-	service_type,	
+	service_type,
 	refresh_interval_sec,
 	represented_by_tables
 )values(
 	'fdw_openweathermap',
 	'weather',
 	3600*12,
-	ARRAY['fdw_openweathermap']	
+	ARRAY['fdw_openweathermap']
 );
 
 
 create table if not exists facts_table(
 	id bigserial primary key,
 	fact_table_name text,
-	table_name text,		
-	key_type text, 
+	table_name text,
+	key_type text,
 	key_val text,
 	dt_type text
 );
 """
-

@@ -11,6 +11,8 @@ reb_main/hdp_cons.py
 reb_main/hive_util.py
 reb_main/pg_srv.py
 reb_main/rebweb.py
+reb_main/rlang_util.py
+reb_main/rustimp.py
 rebfdw.egg-info/PKG-INFO
 rebfdw.egg-info/SOURCES.txt
 rebfdw.egg-info/dependency_links.txt
