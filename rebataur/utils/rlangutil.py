@@ -2,7 +2,7 @@ import pyRserve
 conn = pyRserve.connect()
 
 
-def getRStats(fn_name, values):
+def getRStats(fn_name, values, breaks):
 
     prog = """
 		library(ggplot2)
@@ -11,9 +11,9 @@ def getRStats(fn_name, values):
 
 		filename <- paste('plot_',pid,'.png',sep="")
 		png(width=480, height=480, file=filename)
-		#we <- gsub(",", "", "%s")   # remove comma
-		#we <- as.numeric(we)      # turn
-		%s(rnorm(100),breaks=10);
+		we <- gsub(",", "", "%s")   # remove comma
+		we <- as.numeric(we)      # turn
+		%s(we);
 
 		#print(qplot(carat, price, data = diamonds))
 
@@ -25,3 +25,7 @@ def getRStats(fn_name, values):
 
 		""" % (values, fn_name)
     return conn.eval(prog)
+
+
+# def getRScatterPlots(xvar, yvar):
+

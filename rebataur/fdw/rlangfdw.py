@@ -24,6 +24,7 @@ class RlangFDW(ForeignDataWrapper):
             elif qual.field_name == "vals":
                 self.vals = qual.value
 
+
         line = {}
         result = rlangutil.getRStats(self.fn_name, self.vals)
 
